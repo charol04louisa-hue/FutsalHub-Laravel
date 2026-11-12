@@ -16,8 +16,12 @@ class VerifikasiPembayaranController extends Controller
 {
     public function index(Request $request)
     {
-        // Pembayaran QRIS dan Transfer yang menunggu verifikasi.
+        // QRIS dan Transfer Bank yang menunggu verifikasi bukti.
         $pembayaran = Pesanan::with(['penyewa', 'lapangan'])
+            ->whereIn('jenis_pembayaran', [
+                MetodePembayaran::Qris->value,
+                MetodePembayaran::TransferBank->value,
+            ])
             ->where('status_pembayaran', StatusPembayaran::MenungguVerifikasi)
             ->whereNotNull('bukti_pembayaran')
             ->latest()
@@ -44,12 +48,15 @@ class VerifikasiPembayaranController extends Controller
         $path = $pesanan->bukti_pembayaran;
 
         abort_unless(
-            $path && Storage::disk('local')->exists($path),
+            $pesanan->jenis_pembayaran?->butuhBukti()
+            && $path
+            && Storage::disk('local')->exists($path),
             404,
             'Bukti pembayaran tidak ditemukan.'
         );
 
         $fullPath = Storage::disk('local')->path($path);
+
         $mimeType = Storage::disk('local')->mimeType($path)
             ?: 'application/octet-stream';
 
@@ -72,7 +79,7 @@ class VerifikasiPembayaranController extends Controller
         );
     }
 
-    // Menyetujui pembayaran QRIS dan Transfer.
+    // Menyetujui pembayaran QRIS dan Transfer Bank.
     public function setujui(Pesanan $pesanan)
     {
         DB::transaction(function () use ($pesanan) {
@@ -81,7 +88,8 @@ class VerifikasiPembayaranController extends Controller
                 ->firstOrFail();
 
             abort_unless(
-                $pesanan->status_pembayaran === StatusPembayaran::MenungguVerifikasi
+                $pesanan->jenis_pembayaran?->butuhBukti()
+                && $pesanan->status_pembayaran === StatusPembayaran::MenungguVerifikasi
                 && $pesanan->bukti_pembayaran
                 && Storage::disk('local')->exists($pesanan->bukti_pembayaran),
                 422,
@@ -190,7 +198,7 @@ class VerifikasiPembayaranController extends Controller
             ->with('success', 'Pembayaran tunai berhasil dikonfirmasi.');
     }
 
-    // Menolak pembayaran QRIS dan Transfer.
+    // Menolak pembayaran QRIS dan Transfer Bank.
     public function tolak(Request $request, Pesanan $pesanan)
     {
         $validated = $request->validate([
@@ -207,7 +215,8 @@ class VerifikasiPembayaranController extends Controller
                 ->firstOrFail();
 
             abort_unless(
-                $pesanan->status_pembayaran === StatusPembayaran::MenungguVerifikasi
+                $pesanan->jenis_pembayaran?->butuhBukti()
+                && $pesanan->status_pembayaran === StatusPembayaran::MenungguVerifikasi
                 && $pesanan->bukti_pembayaran
                 && Storage::disk('local')->exists($pesanan->bukti_pembayaran),
                 422,
