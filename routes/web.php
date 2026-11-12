@@ -11,6 +11,7 @@ use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
 
 use App\Http\Controllers\Penyewa\FavoritController;
 use App\Http\Controllers\Penyewa\DashboardController as PenyewaDashboardController;
+use App\Http\Controllers\Kasir\RiwayatPembayaranController;
 use App\Http\Controllers\Penyewa\LapanganController;
 use App\Http\Controllers\Penyewa\DetailLapanganController;
 use App\Http\Controllers\Penyewa\JadwalController;
@@ -67,6 +68,9 @@ Route::middleware(['auth', 'role:kasir'])
     ->group(function () {
         Route::get('/dashboard', [KasirDashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('/riwayat', [RiwayatPembayaranController::class, 'index'])
+            ->name('riwayat');
 
         Route::get('/verifikasi', [VerifikasiPembayaranController::class, 'index'])
             ->name('verifikasi');

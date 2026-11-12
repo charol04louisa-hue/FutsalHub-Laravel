@@ -84,18 +84,18 @@
                     Verifikasi Pembayaran
                 </a>
 
-                <button
-                    type="button"
+                <a
+                    href="{{ route('kasir.riwayat') }}"
                     class="btn btn-outline-success"
-                    disabled
                 >
                     Riwayat Pembayaran
-                </button>
+                </a>
 
             </div>
 
             <small class="text-muted d-block mt-2">
                 Gunakan menu Verifikasi Pembayaran untuk memeriksa transaksi penyewa.
+                Buka Riwayat Pembayaran untuk melihat transaksi yang sudah diproses.
             </small>
 
         </div>
