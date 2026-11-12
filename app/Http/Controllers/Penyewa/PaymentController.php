@@ -173,17 +173,34 @@ class PaymentController extends Controller
             'bukti_pembayaran.max' => 'Ukuran gambar maksimal 5 MB.',
         ]);
 
+        // Simpan file baru terlebih dahulu.
         $path = $request->file('bukti_pembayaran')
             ->store('bukti-pembayaran', 'local');
 
-        if ($pesanan->bukti_pembayaran) {
-            Storage::disk('local')->delete($pesanan->bukti_pembayaran);
+        if (!$path) {
+            return back()->with(
+                'error',
+                'Bukti pembayaran gagal disimpan. Silakan coba kembali.'
+            );
         }
+
+        // Simpan lokasi bukti lama untuk dihapus setelah data baru berhasil disimpan.
+        $oldPath = $pesanan->bukti_pembayaran;
 
         $pesanan->bukti_pembayaran = $path;
         $pesanan->status_pembayaran = StatusPembayaran::MenungguVerifikasi;
         $pesanan->alasan_penolakan = null;
+
+        // Reset verifikasi sebelumnya karena bukti baru perlu diperiksa kembali.
+        $pesanan->diverifikasi_oleh = null;
+        $pesanan->diverifikasi_pada = null;
+
         $pesanan->save();
+
+        // Hapus bukti lama setelah penyimpanan data baru berhasil.
+        if ($oldPath && $oldPath !== $path) {
+            Storage::disk('local')->delete($oldPath);
+        }
 
         Notifikasi::create([
             'user_id' => Auth::id(),
