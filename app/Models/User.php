@@ -10,10 +10,6 @@ class User extends Authenticatable
 {
     protected $table = 'users';
 
-    /**
-     * 'role' sengaja TIDAK fillable agar tidak bisa diubah lewat mass assignment
-     * (mencegah privilege escalation). Set secara eksplisit: $user->role = Role::Penyewa.
-     */
     protected $fillable = [
         'nama_lengkap',
         'email',
@@ -28,13 +24,19 @@ class User extends Authenticatable
     {
         return [
             'role' => Role::class,
-            // Cast 'hashed' hanya meng-hash nilai yang belum berupa hash,
-            // sehingga hash bcrypt lama dari password_hash() PHP tetap valid.
             'password_hash' => 'hashed',
         ];
     }
 
-    /* Tabel lama memakai kolom password_hash, bukan password. */
+    /**
+     * Mengambil nama pengguna dari kolom nama_lengkap.
+     * Agar relasi verifikator->name dapat menampilkan nama kasir.
+     */
+    public function getNameAttribute(): ?string
+    {
+        return $this->nama_lengkap;
+    }
+
     public function getAuthPassword(): string
     {
         return (string) $this->password_hash;
@@ -45,7 +47,6 @@ class User extends Authenticatable
         return 'password_hash';
     }
 
-    /* Tabel lama tidak punya remember_token; fitur "ingat saya" tidak dipakai. */
     public function getRememberTokenName(): string
     {
         return '';
@@ -68,12 +69,12 @@ class User extends Authenticatable
 
     public function notifikasi(): HasMany
     {
-    return $this->hasMany(Notifikasi::class, 'user_id');
+        return $this->hasMany(Notifikasi::class, 'user_id');
     }
 
     public function favoritLapangan(): HasMany
     {
-    return $this->hasMany(FavoritLapangan::class, 'user_id');
+        return $this->hasMany(FavoritLapangan::class, 'user_id');
     }
 
     public function pesananDiverifikasi(): HasMany
