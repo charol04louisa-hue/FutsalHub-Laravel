@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Kasir;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
+use App\Enums\MetodePembayaran;
+use App\Enums\StatusBooking;
 use App\Enums\StatusPembayaran;
 
 class DashboardController extends Controller
@@ -16,15 +18,25 @@ class DashboardController extends Controller
             StatusPembayaran::MenungguVerifikasi
         )
             ->whereNotNull('bukti_pembayaran')
+            ->whereIn('jenis_pembayaran', [
+                MetodePembayaran::Qris->value,
+                MetodePembayaran::TransferBank->value,
+            ])
             ->count();
 
         // Pembayaran Tunai yang menunggu konfirmasi kasir
         $menungguTunai = Pesanan::where(
             'jenis_pembayaran',
-            'Tunai'
+            MetodePembayaran::Tunai->value
         )
-            ->where('status_pembayaran', StatusPembayaran::BelumBayar)
-            ->where('status_booking', 'MenungguVerifikasi')
+            ->where(
+                'status_pembayaran',
+                StatusPembayaran::BelumBayar
+            )
+            ->where(
+                'status_booking',
+                StatusBooking::MenungguVerifikasi->value
+            )
             ->whereNotNull('batas_pembayaran')
             ->where('batas_pembayaran', '>', now())
             ->count();
