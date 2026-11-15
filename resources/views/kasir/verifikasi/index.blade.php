@@ -149,82 +149,6 @@
                                         </div>
                                     </td>
                                 </tr>
-
-                                {{-- Modal Penolakan --}}
-                                <div
-                                    class="modal fade"
-                                    id="modalTolak{{ $item->id }}"
-                                    tabindex="-1"
-                                    aria-hidden="true"
-                                >
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-
-                                            <form
-                                                action="{{ route('kasir.verifikasi.tolak', $item->id) }}"
-                                                method="POST"
-                                            >
-                                                @csrf
-
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title fw-bold">
-                                                        Tolak Pembayaran #{{ $item->id }}
-                                                    </h5>
-
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                    ></button>
-                                                </div>
-
-                                                <div class="modal-body">
-                                                    <p class="text-muted">
-                                                        Masukkan alasan penolakan agar penyewa mengetahui
-                                                        mengapa pembayaran tidak dapat diterima.
-                                                    </p>
-
-                                                    <label class="form-label fw-semibold">
-                                                        Alasan Penolakan
-                                                    </label>
-
-                                                    <textarea
-                                                        name="alasan_penolakan"
-                                                        class="form-control"
-                                                        rows="4"
-                                                        minlength="5"
-                                                        maxlength="1000"
-                                                        placeholder="Contoh: Bukti pembayaran tidak sesuai dengan nominal transaksi."
-                                                        required
-                                                    ></textarea>
-
-                                                    <small class="text-muted">
-                                                        Minimal 5 karakter dan maksimal 1000 karakter.
-                                                    </small>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-light"
-                                                        data-bs-dismiss="modal"
-                                                    >
-                                                        Batal
-                                                    </button>
-
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-danger"
-                                                    >
-                                                        Konfirmasi Penolakan
-                                                    </button>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
                             @endforeach
                         </tbody>
                     </table>
@@ -237,6 +161,84 @@
 
         </div>
     </div>
+
+    {{-- MODAL PENOLAKAN PEMBAYARAN --}}
+    @foreach ($pembayaran as $item)
+        <div
+            class="modal fade"
+            id="modalTolak{{ $item->id }}"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <form
+                        action="{{ route('kasir.verifikasi.tolak', $item->id) }}"
+                        method="POST"
+                    >
+                        @csrf
+
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold">
+                                Tolak Pembayaran #{{ $item->id }}
+                            </h5>
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                            ></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p class="text-muted">
+                                Masukkan alasan penolakan agar penyewa mengetahui
+                                mengapa pembayaran tidak dapat diterima.
+                            </p>
+
+                            <label class="form-label fw-semibold">
+                                Alasan Penolakan
+                            </label>
+
+                            <textarea
+                                name="alasan_penolakan"
+                                class="form-control"
+                                rows="4"
+                                minlength="5"
+                                maxlength="1000"
+                                placeholder="Contoh: Bukti pembayaran tidak sesuai dengan nominal transaksi."
+                                required
+                            ></textarea>
+
+                            <small class="text-muted">
+                                Minimal 5 karakter dan maksimal 1000 karakter.
+                            </small>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                data-bs-dismiss="modal"
+                            >
+                                Batal
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                            >
+                                Konfirmasi Penolakan
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
 
     {{-- PEMBAYARAN TUNAI --}}
     <div class="card border-0 shadow-sm">
