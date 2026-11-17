@@ -138,8 +138,7 @@
                             {{-- TOMBOL PESAN SEKARANG --}}
                             <a
                                 href="{{ route('penyewa.lapangan.detail', $lapangan->id) }}"
-                                class="btn btn-success w-100 mt-3"
-                                style="background-color: #12372A; border-color: #12372A;"
+                                class="fh-btn fh-btn-primary fh-btn-block mt-3"
                             >
                                 Pesan Sekarang
                                 <span class="ms-1">→</span>

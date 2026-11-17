@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // Jumlah booking aktif milik penyewa
+        // Menghitung booking aktif milik penyewa
         $bookingAktif = $user->pesanan()
             ->whereIn('status_booking', [
                 'menunggu_verifikasi',
@@ -21,7 +21,7 @@ class DashboardController extends Controller
             ->whereDate('tanggal_sewa', '>=', today())
             ->count();
 
-        // Jadwal mendatang
+        // Mengambil maksimal 5 jadwal mendatang
         $jadwalMendatang = $user->pesanan()
             ->with('lapangan')
             ->whereIn('status_booking', [
@@ -34,12 +34,12 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Total transaksi yang sudah lunas
+        // Menghitung total transaksi yang sudah lunas
         $totalTransaksi = $user->pesanan()
             ->where('status_pembayaran', 'lunas')
             ->sum('total_harga');
 
-        // Daftar lapangan yang belum dihapus
+        // Mengambil daftar lapangan
         $daftarLapangan = Lapangan::query()
             ->orderBy('nama_lapangan')
             ->limit(4)
