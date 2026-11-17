@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Lihat Lapangan')
@@ -6,11 +7,12 @@
 
 <div class="container py-5">
 
-    <div class="fh-page-head mb-4">
+    {{-- HEADER HALAMAN --}}
+    <section class="fh-page-head mb-4">
         <div>
-            <div class="text-uppercase small fw-bold mb-2">
+            <span class="text-uppercase small fw-bold mb-2 d-block">
                 FUTSALHUB / LAPANGAN
-            </div>
+            </span>
 
             <h1 class="fw-bold mb-2">Pilih Lapangan Favoritmu</h1>
 
@@ -18,24 +20,27 @@
                 Temukan lapangan futsal yang sesuai dengan kebutuhanmu.
             </p>
         </div>
-    </div>
+    </section>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold mb-0">Daftar Lapangan</h4>
+    {{-- JUDUL DAFTAR LAPANGAN --}}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <h2 class="fw-bold mb-0">Daftar Lapangan</h2>
 
-        <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+        <span class="badge rounded-pill bg-light text-dark px-3 py-2">
             {{ $lapangan->count() }} Lapangan
         </span>
     </div>
 
+    {{-- DAFTAR LAPANGAN --}}
     <div class="row g-4">
 
         @forelse ($lapangan as $item)
 
             <div class="col-md-6 col-lg-4">
 
-                <div class="fh-field-card h-100">
+                <article class="fh-field-card h-100">
 
+                    {{-- FOTO LAPANGAN --}}
                     <div class="fh-field-media position-relative">
 
                         @if (
@@ -48,6 +53,7 @@
                                 alt="{{ $item->nama_lapangan }}"
                                 class="w-100 h-100"
                                 style="object-fit: cover;"
+                                loading="lazy"
                             >
 
                         @else
@@ -62,7 +68,7 @@
                             Tersedia
                         </span>
 
-                        {{-- Tombol Favorit --}}
+                        {{-- TOMBOL FAVORIT --}}
                         <form
                             action="{{ route('penyewa.favorit.toggle', $item->id) }}"
                             method="POST"
@@ -75,6 +81,7 @@
                                 class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center"
                                 style="width: 40px; height: 40px; font-size: 20px;"
                                 title="{{ in_array($item->id, $favoritIds) ? 'Hapus dari favorit' : 'Tambah ke favorit' }}"
+                                aria-label="{{ in_array($item->id, $favoritIds) ? 'Hapus dari favorit' : 'Tambah ke favorit' }}"
                             >
                                 @if (in_array($item->id, $favoritIds))
                                     <span class="text-danger">♥</span>
@@ -86,12 +93,14 @@
 
                     </div>
 
+                    {{-- INFORMASI LAPANGAN --}}
                     <div class="fh-field-body">
 
-                        <h5 class="fw-bold mb-2">
+                        <h3>
                             {{ $item->nama_lapangan }}
-                        </h5>
+                        </h3>
 
+                        {{-- SPESIFIKASI --}}
                         <div class="d-flex flex-wrap gap-2 mb-3">
 
                             @if ($item->ukuran)
@@ -108,43 +117,52 @@
 
                         </div>
 
+                        {{-- DESKRIPSI --}}
                         <p class="text-secondary mb-3">
                             {{ $item->deskripsi ?: 'Belum ada deskripsi lapangan.' }}
                         </p>
 
+                        {{-- HARGA --}}
                         <div class="fh-price mb-3">
                             <strong>
-                                Rp{{ number_format($item->harga_per_jam, 0, ',', '.') }}
+                                Rp{{ number_format((float) $item->harga_per_jam, 0, ',', '.') }}
                             </strong>
 
-                            <span class="text-secondary">/ jam</span>
+                            <span>/ jam</span>
                         </div>
 
+                        {{-- TOMBOL DETAIL LAPANGAN --}}
                         <a
                             href="{{ route('penyewa.lapangan.detail', $item->id) }}"
-                            class="fh-btn text-decoration-none text-center"
+                            class="fh-btn fh-btn-primary fh-btn-block text-decoration-none mt-auto"
                         >
                             Pilih Lapangan
+                            <span aria-hidden="true">→</span>
                         </a>
 
                     </div>
 
-                </div>
+                </article>
 
             </div>
 
         @empty
 
+            {{-- KONDISI BELUM ADA LAPANGAN --}}
             <div class="col-12">
+
                 <div class="fh-panel text-center p-5">
+
                     <div class="fs-1 mb-3">⚽</div>
 
-                    <h5 class="fw-bold">Belum Ada Lapangan</h5>
+                    <h3 class="fw-bold">Belum Ada Lapangan</h3>
 
                     <p class="text-secondary mb-0">
                         Saat ini belum ada lapangan yang tersedia.
                     </p>
+
                 </div>
+
             </div>
 
         @endforelse
