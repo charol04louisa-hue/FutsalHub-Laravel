@@ -12,21 +12,12 @@
         </a>
     </div>
 
-    <div class="fh-page-head mb-4">
-        <div>
-            <div class="text-uppercase small fw-bold mb-2">
-                FUTSALHUB / PEMESANAN
-            </div>
-
-            <h1 class="fw-bold mb-2">Pilih Jadwal Bermain</h1>
-
-            <p class="text-secondary mb-0">
-                {{ $lapangan->nama_lapangan }} ·
-                Rp{{ number_format($lapangan->harga_per_jam, 0, ',', '.') }}/jam
-            </p>
-        </div>
-    </div>
-
+        <x-dashboard-header
+        class="fh-dashboard-hero--penyewa"
+        eyebrow="FUTSALHUB / PEMESANAN"
+        title="Pilih Jadwal Bermain"
+        :description="$lapangan->nama_lapangan . ' · Rp' . number_format($lapangan->harga_per_jam, 0, ',', '.') . '/jam'"
+    />
     <div class="fh-panel p-4 mb-4">
         <h5 class="fw-bold mb-3">1. Pilih Tanggal Bermain</h5>
 

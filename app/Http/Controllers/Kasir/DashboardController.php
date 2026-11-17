@@ -7,6 +7,8 @@ use App\Models\Pesanan;
 use App\Enums\MetodePembayaran;
 use App\Enums\StatusBooking;
 use App\Enums\StatusPembayaran;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -41,16 +43,16 @@ class DashboardController extends Controller
             ->where('batas_pembayaran', '>', now())
             ->count();
 
-        // Total seluruh transaksi yang menunggu tindakan kasir
+        // Total transaksi yang menunggu tindakan kasir
         $menungguVerifikasi = $menungguNonTunai + $menungguTunai;
 
-        // Pembayaran yang berhasil
+        // Pembayaran berhasil
         $pembayaranBerhasil = Pesanan::where(
             'status_pembayaran',
             StatusPembayaran::Lunas
         )->count();
 
-        // Pembayaran yang ditolak
+        // Pembayaran ditolak
         $pembayaranDitolak = Pesanan::where(
             'status_pembayaran',
             StatusPembayaran::Ditolak
@@ -59,11 +61,60 @@ class DashboardController extends Controller
         // Seluruh transaksi
         $totalTransaksi = Pesanan::count();
 
+        // Grafik aktivitas transaksi 7 hari terakhir
+        $awalPeriode = Carbon::today()->subDays(6);
+        $akhirPeriode = Carbon::now();
+
+        $transaksiHarian = Pesanan::query()
+            ->selectRaw('DATE(created_at) as tanggal, COUNT(*) as total')
+            ->whereBetween('created_at', [
+                $awalPeriode,
+                $akhirPeriode,
+            ])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('tanggal')
+            ->pluck('total', 'tanggal');
+
+        $labelGrafikTransaksi = [];
+        $dataGrafikTransaksi = [];
+
+        for ($i = 0; $i < 7; $i++) {
+            $tanggal = $awalPeriode->copy()->addDays($i);
+            $key = $tanggal->format('Y-m-d');
+
+            $labelGrafikTransaksi[] = $tanggal->translatedFormat('D, d M');
+            $dataGrafikTransaksi[] = (int) ($transaksiHarian[$key] ?? 0);
+        }
+
+        // Grafik distribusi status pembayaran
+        $jumlahStatusPembayaran = Pesanan::query()
+            ->select('status_pembayaran', DB::raw('COUNT(*) as total'))
+            ->groupBy('status_pembayaran')
+            ->pluck('total', 'status_pembayaran');
+
+        $labelGrafikStatus = [
+            'Menunggu Verifikasi',
+            'Lunas',
+            'Belum Bayar',
+            'Ditolak',
+        ];
+
+        $dataGrafikStatus = [
+            (int) ($jumlahStatusPembayaran[StatusPembayaran::MenungguVerifikasi->value] ?? 0),
+            (int) ($jumlahStatusPembayaran[StatusPembayaran::Lunas->value] ?? 0),
+            (int) ($jumlahStatusPembayaran[StatusPembayaran::BelumBayar->value] ?? 0),
+            (int) ($jumlahStatusPembayaran[StatusPembayaran::Ditolak->value] ?? 0),
+        ];
+
         return view('kasir.dashboard', compact(
             'menungguVerifikasi',
             'pembayaranBerhasil',
             'pembayaranDitolak',
-            'totalTransaksi'
+            'totalTransaksi',
+            'labelGrafikTransaksi',
+            'dataGrafikTransaksi',
+            'labelGrafikStatus',
+            'dataGrafikStatus'
         ));
     }
 }

@@ -7,20 +7,13 @@
 
 <div class="container py-5">
 
-    {{-- HEADER HALAMAN --}}
-    <section class="fh-page-head mb-4">
-        <div>
-            <span class="text-uppercase small fw-bold mb-2 d-block">
-                FUTSALHUB / LAPANGAN
-            </span>
-
-            <h1 class="fw-bold mb-2">Pilih Lapangan Favoritmu</h1>
-
-            <p class="text-secondary mb-0">
-                Temukan lapangan futsal yang sesuai dengan kebutuhanmu.
-            </p>
-        </div>
-    </section>
+        {{-- HEADER HALAMAN --}}
+    <x-dashboard-header
+        class="fh-dashboard-hero--penyewa"
+        eyebrow="FUTSALHUB / LAPANGAN"
+        title="Pilih Lapangan Favoritmu"
+        description="Temukan lapangan futsal yang sesuai dengan kebutuhanmu."
+    />
 
     {{-- JUDUL DAFTAR LAPANGAN --}}
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">

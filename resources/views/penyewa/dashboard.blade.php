@@ -6,21 +6,13 @@
 @section('content')
 
 {{-- HEADER DASHBOARD --}}
-<section class="fh-page-head">
-    <div class="container">
-        <span class="text-uppercase fw-bold small">
-            FUTSALHUB / DASHBOARD
-        </span>
-
-        <h1>Halo, {{ $user->nama_lengkap }}! 👋</h1>
-
-        <p>
-            Selamat datang kembali. Siap menemukan lapangan
-            dan bermain futsal hari ini?
-        </p>
-    </div>
-</section>
-
+<x-dashboard-header
+    class="fh-dashboard-hero--penyewa"
+    eyebrow="FUTSALHUB MANAGEMENT"
+    title="Dashboard Penyewa"
+    :greeting="'Halo, ' . $user->nama_lengkap . '!'"
+    description="Selamat datang kembali. Siap menemukan lapangan dan bermain futsal hari ini?"
+/>
 <div class="container py-5">
 
     {{-- STATISTIK --}}

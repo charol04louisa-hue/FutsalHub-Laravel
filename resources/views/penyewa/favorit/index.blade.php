@@ -6,19 +6,12 @@
 
 <div class="container py-5">
 
-    <div class="fh-page-head mb-4">
-        <div>
-            <div class="text-uppercase small fw-bold mb-2">
-                FUTSALHUB / FAVORIT
-            </div>
-
-            <h1 class="fw-bold mb-2">Lapangan Favorit</h1>
-
-            <p class="text-secondary mb-0">
-                Kumpulan lapangan yang kamu simpan untuk booking nanti.
-            </p>
-        </div>
-    </div>
+        <x-dashboard-header
+        class="fh-dashboard-hero--penyewa"
+        eyebrow="FUTSALHUB / FAVORIT"
+        title="Lapangan Favorit"
+        description="Kumpulan lapangan yang kamu simpan untuk booking nanti."
+    />
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">

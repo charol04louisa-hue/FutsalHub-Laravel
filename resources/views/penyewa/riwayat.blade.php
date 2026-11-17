@@ -4,12 +4,12 @@
 @section('content')
     <div class="container py-5">
 
-        <div class="mb-4">
-            <h2 class="fw-bold">Riwayat Transaksi</h2>
-            <p class="text-muted">
-                Lihat seluruh riwayat pemesanan dan pembayaran lapanganmu.
-            </p>
-        </div>
+                <x-dashboard-header
+            class="fh-dashboard-hero--penyewa"
+            eyebrow="FUTSALHUB / TRANSAKSI"
+            title="Riwayat Transaksi"
+            description="Lihat seluruh riwayat pemesanan dan pembayaran lapanganmu."
+        />
 
         @if (session('success'))
             <div class="alert alert-success">

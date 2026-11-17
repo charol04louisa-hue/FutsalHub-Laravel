@@ -549,3 +549,93 @@ body.fh-body {
 .fh-table-heading h2 { font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--fh-forest); }
 @media (max-width: 900px) { .fh-auth-shell { grid-template-columns: 1fr; padding: 14px; } .fh-auth-aside { min-height: 280px; order: -1; } .fh-auth-aside h2 { font-size: 2.4rem; } }
 @media (max-width: 480px) { .fh-role-grid { grid-template-columns: 1fr; } .fh-role-option { min-height: 66px; flex-direction: row; } .fh-auth-card { padding: 24px 18px; } }
+
+
+
+/* ---------- Shared Dashboard Header ---------- */
+
+.fh-dashboard-hero {
+    background: linear-gradient(120deg, #123d2d, #198754);
+    border-radius: 18px;
+    padding: 23px 28px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    width: calc(100% - 48px);
+    max-width: none;
+    margin: 0 auto 26px;
+}
+
+.fh-dashboard-hero > .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: none;
+    padding: 0;
+}
+
+.fh-dashboard-hero::after {
+    content: "";
+    position: absolute;
+    width: 155px;
+    height: 155px;
+    border: 27px solid rgba(255, 255, 255, .08);
+    border-radius: 50%;
+    right: -35px;
+    top: -65px;
+    pointer-events: none;
+}
+
+.fh-dashboard-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    color: rgba(255, 255, 255, .75);
+    margin-bottom: 8px;
+}
+
+.fh-dashboard-hero h1 {
+    color: #fff;
+    font-size: clamp(1.55rem, 1.2rem + 1.2vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.fh-dashboard-hero p {
+    color: rgba(255, 255, 255, .78);
+    font-size: .92rem;
+    margin-bottom: 0;
+    max-width: 620px;
+    line-height: 1.5;
+}
+
+@media (max-width: 575.98px) {
+    .fh-dashboard-hero {
+        width: calc(100% - 24px);
+        padding: 21px 20px;
+        border-radius: 15px;
+        margin-bottom: 22px;
+    }
+
+    .fh-dashboard-hero::after {
+        width: 115px;
+        height: 115px;
+        border-width: 22px;
+        right: -40px;
+        top: -45px;
+    }
+
+    .fh-dashboard-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .fh-dashboard-hero p {
+        font-size: .85rem;
+    }
+}
+/* ---------- Penyewa Dashboard Header Width ---------- */
+
+.fh-dashboard-hero--penyewa {
+    max-width: 1200px;
+}
