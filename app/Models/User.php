@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Role;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -16,6 +17,7 @@ class User extends Authenticatable
         'username',
         'nomor_telepon',
         'password_hash',
+        'owner_id',
     ];
 
     protected $hidden = ['password_hash'];
@@ -30,7 +32,6 @@ class User extends Authenticatable
 
     /**
      * Mengambil nama pengguna dari kolom nama_lengkap.
-     * Agar relasi verifikator->name dapat menampilkan nama kasir.
      */
     public function getNameAttribute(): ?string
     {
@@ -55,6 +56,22 @@ class User extends Authenticatable
     public function punyaRole(Role ...$roles): bool
     {
         return in_array($this->role, $roles, true);
+    }
+
+    /**
+     * Daftar karyawan (Admin dan Kasir) milik Pemilik.
+     */
+    public function karyawan(): HasMany
+    {
+        return $this->hasMany(User::class, 'owner_id');
+    }
+
+    /**
+     * Pemilik yang menaungi akun karyawan.
+     */
+    public function pemilik(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function lapanganDimiliki(): HasMany
