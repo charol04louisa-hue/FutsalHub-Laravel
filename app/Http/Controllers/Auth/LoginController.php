@@ -34,7 +34,14 @@ class LoginController extends Controller
 
         // Ambil user yang berhasil login.
         $user = Auth::user();
+        // Pastikan akun masih aktif.
+        if (!$user->is_active) {
+            Auth::logout();
 
+            throw ValidationException::withMessages([
+                 'username' => 'Akun kamu sedang dinonaktifkan. Hubungi Pemilik Lapangan.',
+            ]);
+        }
         // Ambil role sebagai string, baik jika menggunakan Enum maupun string.
         $userRole = $user->role instanceof \BackedEnum
             ? $user->role->value

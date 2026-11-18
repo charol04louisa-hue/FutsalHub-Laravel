@@ -27,6 +27,7 @@ class User extends Authenticatable
         return [
             'role' => Role::class,
             'password_hash' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 

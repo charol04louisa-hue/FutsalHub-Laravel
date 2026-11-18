@@ -13,7 +13,17 @@ class RoleMiddleware
         if (!auth()->check()) {
             return redirect()->route('login');
         }
+        // Pastikan akun masih aktif.
+        if (!auth()->user()->is_active) {
+             auth()->logout();
 
+             $request->session()->invalidate();
+             $request->session()->regenerateToken();
+
+    return redirect()->route('login')->withErrors([
+        'username' => 'Akun kamu sedang dinonaktifkan. Hubungi Pemilik Lapangan.',
+    ]);
+}
         $userRole = auth()->user()->role;
 
         $userRole = $userRole instanceof \BackedEnum

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
-
+use App\Http\Controllers\Pemilik\KaryawanController;
 use App\Http\Controllers\Penyewa\FavoritController;
 use App\Http\Controllers\Penyewa\DashboardController as PenyewaDashboardController;
 use App\Http\Controllers\Kasir\RiwayatPembayaranController;
@@ -101,8 +101,10 @@ Route::middleware(['auth', 'role:pemilik'])
         Route::get('/dashboard', function () {
             return response('Dashboard Pemilik Lapangan belum tersedia.', 501);
         })->name('dashboard');
-    });
 
+        Route::get('/karyawan', [KaryawanController::class, 'index'])
+            ->name('karyawan.index');
+    });
 /*
 |--------------------------------------------------------------------------
 | Fitur Penyewa
