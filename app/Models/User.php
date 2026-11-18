@@ -18,6 +18,7 @@ class User extends Authenticatable
         'nomor_telepon',
         'password_hash',
         'owner_id',
+        'role',
     ];
 
     protected $hidden = ['password_hash'];

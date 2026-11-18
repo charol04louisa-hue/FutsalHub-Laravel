@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -16,6 +17,12 @@
                         Total {{ $karyawan->count() }} karyawan
                     </p>
                 </div>
+
+                <a href="{{ route('pemilik.karyawan.create') }}"
+                    class="btn btn-success rounded-3">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Tambah Karyawan
+                </a>
             </div>
 
             @if ($karyawan->isEmpty())
@@ -34,8 +41,10 @@
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($karyawan as $pegawai)
                                 <tr>
@@ -48,6 +57,42 @@
                                         @else
                                             <span class="badge bg-secondary">Nonaktif</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            <a href="{{ route('pemilik.karyawan.edit', $pegawai->id) }}"
+                                                class="btn btn-sm btn-outline-primary rounded-3">
+                                                Edit
+                                            </a>
+
+                                            <form action="{{ route('pemilik.karyawan.toggle-status', $pegawai->id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Apakah kamu yakin ingin mengubah status akun karyawan ini?')">
+                                                @csrf
+                                                @method('PATCH')
+
+                                                @if ($pegawai->is_active)
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">
+                                                        Nonaktifkan
+                                                    </button>
+                                                @else
+                                                    <button type="submit" class="btn btn-sm btn-outline-success rounded-3">
+                                                        Aktifkan
+                                                    </button>
+                                                @endif
+                                            </form>
+
+                                            <form action="{{ route('pemilik.karyawan.destroy', $pegawai->id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun karyawan ini? Tindakan ini tidak dapat dibatalkan.')">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

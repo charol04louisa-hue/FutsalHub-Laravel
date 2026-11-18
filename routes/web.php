@@ -104,6 +104,18 @@ Route::middleware(['auth', 'role:pemilik'])
 
         Route::get('/karyawan', [KaryawanController::class, 'index'])
             ->name('karyawan.index');
+        Route::post('/karyawan', [KaryawanController::class, 'store'])
+            ->name('karyawan.store');
+        Route::get('/karyawan/create', [KaryawanController::class, 'create'])
+            ->name('karyawan.create');
+        Route::patch('/karyawan/{id}/status', [KaryawanController::class, 'toggleStatus'])
+            ->name('karyawan.toggle-status');
+        Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])
+             ->name('karyawan.edit');
+        Route::put('/karyawan/{id}', [KaryawanController::class, 'update'])
+            ->name('karyawan.update');
+        Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])
+            ->name('karyawan.destroy');
     });
 /*
 |--------------------------------------------------------------------------
