@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Lapangan;
 use App\Models\Pesanan;
 use App\Enums\StatusPembayaran;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -31,11 +30,50 @@ class DashboardController extends Controller
             ->where('status_pembayaran', StatusPembayaran::Lunas->value)
             ->sum('total_harga');
 
+        // Grafik pendapatan 7 hari terakhir.
+        $tanggalMulai = now()->subDays(6)->startOfDay();
+        $tanggalAkhir = now()->endOfDay();
+
+        $pendapatanHarian = (clone $pesanan)
+            ->where('status_pembayaran', StatusPembayaran::Lunas->value)
+            ->whereBetween('created_at', [$tanggalMulai, $tanggalAkhir])
+            ->selectRaw('DATE(created_at) as tanggal, SUM(total_harga) as total')
+            ->groupBy('tanggal')
+            ->pluck('total', 'tanggal');
+
+        $labelGrafikPendapatan = [];
+        $dataGrafikPendapatan = [];
+
+        for (
+            $tanggal = $tanggalMulai->copy();
+            $tanggal->lte($tanggalAkhir);
+            $tanggal->addDay()
+        ) {
+            $formatTanggal = $tanggal->format('Y-m-d');
+
+            $labelGrafikPendapatan[] = $tanggal->format('d/m');
+
+            $dataGrafikPendapatan[] = (float) (
+                $pendapatanHarian[$formatTanggal] ?? 0
+            );
+        }
+
+        // Lima aktivitas penyewaan terbaru.
+        $aktivitasTerbaru = (clone $pesanan)
+            ->with('lapangan', 'verifikator')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
+
         return view('pemilik.dashboard', compact(
             'totalLapangan',
             'totalKaryawan',
             'totalTransaksi',
-            'totalPendapatan'
+            'totalPendapatan',
+            'labelGrafikPendapatan',
+            'dataGrafikPendapatan',
+            'aktivitasTerbaru'
         ));
     }
 }
