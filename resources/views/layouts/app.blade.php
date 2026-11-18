@@ -130,7 +130,34 @@
                         </li>
 
                     @endif
+                    {{-- MENU PEMILIK --}}  
+                    @if($role === 'pemilik')
 
+                        {{-- DASHBOARD --}}
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}"
+                               href="{{ route('pemilik.dashboard') }}">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        {{-- MANAJEMEN KARYAWAN --}}
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('pemilik.karyawan.*') ? 'active' : '' }}"
+                               href="{{ route('pemilik.karyawan.index') }}">
+                                Manajemen Karyawan
+                            </a>
+                        </li>
+
+                        {{-- MANAJEMEN LAPANGAN --}}
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('pemilik.lapangan.*') ? 'active' : '' }}"
+                               href="{{ route('pemilik.lapangan.index') }}">
+                                Manajemen Lapangan
+                            </a>
+                        </li>
+
+                    @endif      
                     {{-- INFORMASI AKUN --}}
                     <li class="nav-item ms-lg-3">
                         <span class="nav-link">

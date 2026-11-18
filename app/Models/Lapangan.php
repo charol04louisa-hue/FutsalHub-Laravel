@@ -14,14 +14,15 @@ class Lapangan extends Model
 
     protected $table = 'lapangan';
 
-    protected $fillable = [
-        'nama_lapangan',
-        'ukuran',
-        'jenis_lantai',
-        'harga_per_jam',
-        'deskripsi',
-        'gambar',
-    ];
+   protected $fillable = [
+    'nama_lapangan',
+    'ukuran',
+    'jenis_lantai',
+    'harga_per_jam',
+    'deskripsi',
+    'gambar',
+    'owner_id',
+];
 
     protected function casts(): array
     {

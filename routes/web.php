@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -8,12 +9,15 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
+use App\Http\Controllers\Kasir\RiwayatPembayaranController;
+
 use App\Http\Controllers\Pemilik\KaryawanController;
 use App\Http\Controllers\Pemilik\DashboardController as PemilikDashboardController;
+use App\Http\Controllers\Pemilik\LapanganController as PemilikLapanganController;
+
 use App\Http\Controllers\Penyewa\FavoritController;
 use App\Http\Controllers\Penyewa\DashboardController as PenyewaDashboardController;
-use App\Http\Controllers\Kasir\RiwayatPembayaranController;
-use App\Http\Controllers\Penyewa\LapanganController;
+use App\Http\Controllers\Penyewa\LapanganController as PenyewaLapanganController;
 use App\Http\Controllers\Penyewa\DetailLapanganController;
 use App\Http\Controllers\Penyewa\JadwalController;
 use App\Http\Controllers\Penyewa\BookingController;
@@ -85,43 +89,65 @@ Route::middleware(['auth', 'role:kasir'])
         Route::post('/verifikasi/{pesanan}/tolak', [VerifikasiPembayaranController::class, 'tolak'])
             ->name('verifikasi.tolak');
 
-        // Konfirmasi pembayaran tunai oleh kasir.
         Route::post('/tunai/{pesanan}/konfirmasi', [VerifikasiPembayaranController::class, 'konfirmasiTunai'])
             ->name('tunai.konfirmasi');
     });
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Pemilik
+| Dashboard dan Manajemen Pemilik
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:pemilik'])
     ->prefix('pemilik')
     ->name('pemilik.')
     ->group(function () {
+
+        // Dashboard
         Route::get('/dashboard', [PemilikDashboardController::class, 'index'])
             ->name('dashboard');
 
+        // Manajemen Lapangan
+        Route::get('/lapangan', [PemilikLapanganController::class, 'index'])
+            ->name('lapangan.index');
+
+        Route::get('/lapangan/create', [PemilikLapanganController::class, 'create'])
+            ->name('lapangan.create');
+
+        Route::post('/lapangan', [PemilikLapanganController::class, 'store'])
+            ->name('lapangan.store');
+
+        Route::get('/lapangan/{id}/edit', [PemilikLapanganController::class, 'edit'])
+            ->name('lapangan.edit');
+
+        Route::put('/lapangan/{id}', [PemilikLapanganController::class, 'update'])
+            ->name('lapangan.update');
+
+        Route::delete('/lapangan/{id}', [PemilikLapanganController::class, 'destroy'])
+            ->name('lapangan.destroy');
+
+        // Manajemen Karyawan
         Route::get('/karyawan', [KaryawanController::class, 'index'])
             ->name('karyawan.index');
+
         Route::post('/karyawan', [KaryawanController::class, 'store'])
             ->name('karyawan.store');
+
         Route::get('/karyawan/create', [KaryawanController::class, 'create'])
             ->name('karyawan.create');
+
         Route::patch('/karyawan/{id}/status', [KaryawanController::class, 'toggleStatus'])
             ->name('karyawan.toggle-status');
+
         Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])
-             ->name('karyawan.edit');
+            ->name('karyawan.edit');
+
         Route::put('/karyawan/{id}', [KaryawanController::class, 'update'])
             ->name('karyawan.update');
+
         Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])
             ->name('karyawan.destroy');
     });
-/*
-|--------------------------------------------------------------------------
-| Fitur Penyewa
-|--------------------------------------------------------------------------
-*/
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +164,7 @@ Route::middleware(['auth', 'role:penyewa'])
             ->name('dashboard');
 
         // Lapangan
-        Route::get('/lapangan', [LapanganController::class, 'index'])
+        Route::get('/lapangan', [PenyewaLapanganController::class, 'index'])
             ->name('lapangan');
 
         Route::get('/lapangan/{id}', [DetailLapanganController::class, 'show'])
