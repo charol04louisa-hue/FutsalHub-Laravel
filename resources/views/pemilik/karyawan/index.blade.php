@@ -7,7 +7,19 @@
         title="Manajemen Karyawan"
         subtitle="Kelola akun Admin dan Kasir yang bekerja di lapangan futsal milikmu."
     />
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
     <div class="card border-0 shadow-sm rounded-4 mt-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
