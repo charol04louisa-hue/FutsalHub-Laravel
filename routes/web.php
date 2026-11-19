@@ -4,7 +4,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\Admin\ReportExportController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
@@ -51,7 +51,7 @@ Route::get('/register', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Admin
+| Dashboard Admin dan Export Laporan
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:admin'])
@@ -60,6 +60,12 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('/export/pdf', [ReportExportController::class, 'pdf'])
+            ->name('export.pdf');
+
+        Route::get('/export/excel', [ReportExportController::class, 'excel'])
+            ->name('export.excel');
     });
 
 /*
