@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -22,7 +23,7 @@
 <nav class="navbar navbar-expand-lg fh-nav">
     <div class="container">
 
-        <a class="fh-brand" href="{{ url('/') }}" aria-label="FutsalHub beranda">
+        <a class="fh-brand" href="{{ route('home') }}" aria-label="FutsalHub beranda">
             <span class="fh-brand-mark" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="9"/>
@@ -49,37 +50,37 @@
             <ul class="navbar-nav ms-auto align-items-lg-center">
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url('/') }}">
+                    <a class="nav-link active" aria-current="page" href="{{ route('home') }}">
                         Beranda
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('public.lapangan') }}">
                         Lapangan
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('public.jadwal') }}">
                         Jadwal
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('login') }}">
                         Riwayat <small class="fh-text-muted">(Admin)</small>
                     </a>
                 </li>
 
                 <li class="nav-item ms-lg-3">
-                    <a class="fh-btn fh-btn-outline fh-btn-sm fh-nav-cta" href="{{ url('/login') }}">
+                    <a class="fh-btn fh-btn-outline fh-btn-sm fh-nav-cta" href="{{ route('login') }}">
                         Masuk
                     </a>
                 </li>
 
                 <li class="nav-item ms-lg-2">
-                    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="#">
+                    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="{{ route('login') }}">
                         Daftar
                     </a>
                 </li>
@@ -113,7 +114,7 @@
 
                 <div class="fh-hero-actions">
 
-                    <a class="fh-btn fh-btn-lime fh-btn-lg" href="#">
+                    <a class="fh-btn fh-btn-lime fh-btn-lg" href="{{ route('public.lapangan') }}">
                         Cari Lapangan
 
                         <svg width="18" height="18" viewBox="0 0 24 24"
@@ -124,7 +125,7 @@
                         </svg>
                     </a>
 
-                    <a class="fh-btn fh-btn-ghost-light fh-btn-lg" href="#">
+                    <a class="fh-btn fh-btn-ghost-light fh-btn-lg" href="{{ route('public.jadwal') }}">
                         Lihat Jadwal
                     </a>
 
@@ -259,7 +260,7 @@
                     </p>
                 </div>
 
-                <a href="#" class="fh-btn fh-btn-lime fh-btn-lg">
+                <a href="{{ route('login') }}" class="fh-btn fh-btn-lime fh-btn-lg">
                     Pesan Lapangan
                 </a>
 
@@ -277,7 +278,7 @@
 
             <div class="col-lg-5">
 
-                <a class="fh-brand mb-3" href="{{ url('/') }}">
+                <a class="fh-brand mb-3" href="{{ route('home') }}">
                     <span class="fh-brand-mark" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2.2"
@@ -301,10 +302,10 @@
                 <h6>Navigasi</h6>
 
                 <ul>
-                    <li><a href="{{ url('/') }}">Beranda</a></li>
-                    <li><a href="#">Lapangan</a></li>
-                    <li><a href="#">Jadwal</a></li>
-                    <li><a href="#">Riwayat</a></li>
+                    <li><a href="{{ route('home') }}">Beranda</a></li>
+                    <li><a href="{{ route('public.lapangan') }}">Lapangan</a></li>
+                    <li><a href="{{ route('public.jadwal') }}">Jadwal</a></li>
+                    <li><a href="{{ route('login') }}">Riwayat</a></li>
                 </ul>
 
             </div>
@@ -314,8 +315,8 @@
                 <h6>Mulai</h6>
 
                 <ul>
-                    <li><a href="#">Pesan Lapangan</a></li>
-                    <li><a href="#">Cek Slot Kosong</a></li>
+                    <li><a href="{{ route('login') }}">Pesan Lapangan</a></li>
+                    <li><a href="{{ route('public.jadwal') }}">Cek Slot Kosong</a></li>
                 </ul>
 
             </div>
