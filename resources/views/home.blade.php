@@ -67,16 +67,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">
-                        Riwayat <small class="fh-text-muted">(Admin)</small>
-                    </a>
-                </li>
-
-                <li class="nav-item ms-lg-3">
-                    <a class="fh-btn fh-btn-outline fh-btn-sm fh-nav-cta" href="{{ route('login') }}">
-                        Masuk
-                    </a>
+                
                 </li>
 
                 <li class="nav-item ms-lg-2">
