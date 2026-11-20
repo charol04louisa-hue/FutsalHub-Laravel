@@ -67,11 +67,8 @@
                     </a>
                 </li>
 
-                
-                </li>
-
                 <li class="nav-item ms-lg-2">
-                    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="{{ route('login') }}">
+                    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="{{ route('register') }}">
                         Daftar
                     </a>
                 </li>
