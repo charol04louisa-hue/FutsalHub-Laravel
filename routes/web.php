@@ -26,7 +26,8 @@ use App\Http\Controllers\Penyewa\RiwayatController;
 use App\Http\Controllers\Penyewa\ProfilController;
 use App\Http\Controllers\Penyewa\NotifikasiController;
 use App\Http\Controllers\Penyewa\UlasanLapanganController;
-
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 /*
 |--------------------------------------------------------------------------
 | Halaman Utama
@@ -49,7 +50,22 @@ Route::get('/jadwal-hari-ini', [PublicController::class, 'jadwal'])
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+// Password Reset
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
 
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware(['guest', 'throttle:5,1'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware(['guest', 'throttle:5,1'])
+    ->name('password.update');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
     ->name('register');
 

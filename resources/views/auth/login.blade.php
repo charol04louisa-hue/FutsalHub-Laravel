@@ -308,6 +308,12 @@
                     </button>
                 </div>
             </div>
+            <div class="text-end mb-3">
+                <a href="{{ route('password.request') }}"
+                style="color: var(--fh-green); font-size: .9rem; font-weight: 700; text-decoration: none;">
+                 Lupa Password?
+            </a>
+        </div>
 
             <button class="fh-btn fh-btn-primary w-100" type="submit">
                 Masuk ke FutsalHub →
