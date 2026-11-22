@@ -2,11 +2,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\ReportExportController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
 use App\Http\Controllers\Kasir\RiwayatPembayaranController;
@@ -35,6 +35,11 @@ use App\Http\Controllers\Penyewa\UlasanLapanganController;
 Route::get('/', function () {
     return view('home');
 })->name('home');
+// Halaman publik
+Route::get('/lapangan', [PublicController::class, 'lapangan'])
+    ->name('public.lapangan');
+Route::get('/jadwal-hari-ini', [PublicController::class, 'jadwal'])
+    ->name('public.jadwal');
 
 /*
 |--------------------------------------------------------------------------
@@ -45,9 +50,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/register', function () {
-    return redirect()->route('login')->with('status', 'Fitur registrasi belum tersedia.');
-})->name('register');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
+    ->name('register');
+
+Route::post('/register', [RegisterController::class, 'register'])
+    ->middleware('throttle:5,1')
+    ->name('register.store');
 
 /*
 |--------------------------------------------------------------------------

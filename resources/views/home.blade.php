@@ -68,11 +68,16 @@
                 </li>
 
                 <li class="nav-item ms-lg-2">
-                    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="{{ route('register') }}">
-                        Daftar
-                    </a>
-                </li>
+    <a class="nav-link" href="{{ route('login') }}">
+        Masuk
+    </a>
+</li>
 
+<li class="nav-item ms-lg-2">
+    <a class="fh-btn fh-btn-primary fh-btn-sm fh-nav-cta" href="{{ route('register') }}">
+        Daftar
+    </a>
+</li>
             </ul>
         </div>
     </div>

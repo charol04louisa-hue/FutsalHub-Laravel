@@ -152,6 +152,16 @@
             font-size: .92rem;
         }
 
+        .fh-auth-bottom a {
+            color: var(--fh-green);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .fh-auth-bottom a:hover {
+            text-decoration: underline;
+        }
+
         .fh-back-link {
             display: block;
             text-align: center;
@@ -192,7 +202,7 @@
 
     <div class="fh-auth-card">
 
-        <a class="fh-brand mb-4" href="/">
+        <a class="fh-brand mb-4" href="{{ route('home') }}">
             <span class="fh-brand-mark">⚽</span>
             <span>Futsal<span class="fh-brand-accent">Hub</span></span>
         </a>
@@ -207,6 +217,12 @@
         @if ($errors->any())
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first() }}
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
             </div>
         @endif
 
@@ -301,10 +317,10 @@
 
         <p class="fh-auth-bottom">
             Belum punya akun?
-            <a href="#">Daftar sebagai penyewa</a>
+            <a href="{{ route('register') }}">Daftar sebagai penyewa</a>
         </p>
 
-        <a class="fh-back-link" href="/">
+        <a class="fh-back-link" href="{{ route('home') }}">
             ← Kembali ke FutsalHub
         </a>
 
