@@ -1,15 +1,17 @@
 
 @extends('layouts.app')
 
+@section('title', 'Manajemen Lapangan')
+
 @section('content')
-<div class="container py-5">
+<div class="container py-4">
 
     <x-dashboard-header
         title="Manajemen Lapangan"
-        subtitle="Kelola informasi, harga, dan ketersediaan lapangan futsal milikmu."
+        subtitle="Lihat informasi, harga, dan ketersediaan lapangan futsal milikmu."
     />
 
-    {{-- Notifikasi --}}
+    {{-- NOTIFIKASI --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show rounded-3 mt-4" role="alert">
             {{ session('success') }}
@@ -24,6 +26,7 @@
         </div>
     @endif
 
+    {{-- DAFTAR LAPANGAN --}}
     <div class="card border-0 shadow-sm rounded-4 mt-4">
         <div class="card-body p-4">
 
@@ -35,11 +38,11 @@
                     </p>
                 </div>
 
-                <a href="{{ route('pemilik.lapangan.create') }}"
-                   class="btn btn-success rounded-3 px-4">
-                    <i class="bi bi-plus-lg me-1"></i>
-                    Tambah Lapangan
-                </a>
+                <span class="badge rounded-pill px-3 py-2"
+                      style="background: #e8f7ee; color: #168653;">
+                    <i class="bi bi-eye me-1"></i>
+                    Mode Lihat
+                </span>
             </div>
 
             <div class="table-responsive">
@@ -50,7 +53,7 @@
                             <th>Ukuran</th>
                             <th>Jenis Lantai</th>
                             <th>Harga / Jam</th>
-                            <th class="text-center" style="min-width: 190px;">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
@@ -67,8 +70,10 @@
                                                 style="width: 65px; height: 50px; object-fit: cover;"
                                             >
                                         @else
-                                            <div class="rounded-3 bg-light d-flex align-items-center justify-content-center"
-                                                 style="width: 65px; height: 50px;">
+                                            <div
+                                                class="rounded-3 bg-light d-flex align-items-center justify-content-center"
+                                                style="width: 65px; height: 50px;"
+                                            >
                                                 <i class="bi bi-image text-muted fs-4"></i>
                                             </div>
                                         @endif
@@ -92,42 +97,30 @@
                                     Rp{{ number_format((float) $item->harga_per_jam, 0, ',', '.') }}
                                 </td>
 
-                                {{-- Tombol Aksi --}}
-                                <td class="text-center">
-                                    <div class="fh-owner-actions">
-
-                                        <a href="{{ route('pemilik.lapangan.edit', $item->id) }}"
-                                           class="fh-owner-action-btn fh-owner-action-edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                            <span>Edit</span>
-                                        </a>
-
-                                        <form
-                                            action="{{ route('pemilik.lapangan.destroy', $item->id) }}"
-                                            method="POST"
-                                            class="m-0"
-                                            onsubmit="return confirm('Yakin ingin menghapus lapangan ini?')"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit"
-                                                    class="fh-owner-action-btn fh-owner-action-delete">
-                                                <i class="bi bi-trash"></i>
-                                                <span>Hapus</span>
-                                            </button>
-                                        </form>
-
-                                    </div>
+                                <td>
+                                    <a
+                                        href="{{ route('pemilik.lapangan.show', $item->id) }}"
+                                        class="btn btn-sm rounded-3 px-3"
+                                        style="background:#e8f7ee;color:#168653;font-weight:600;"
+                                    >
+                                        <i class="bi bi-eye me-1"></i>
+                                        Lihat Detail
+                                    </a>
                                 </td>
                             </tr>
+
                         @empty
                             <tr>
                                 <td colspan="5" class="text-center py-5">
                                     <i class="bi bi-building text-muted fs-1"></i>
-                                    <h6 class="fw-bold mt-3">Belum Ada Lapangan</h6>
+
+                                    <h6 class="fw-bold mt-3">
+                                        Belum Ada Lapangan
+                                    </h6>
+
                                     <p class="text-muted small mb-0">
-                                        Silakan tambahkan lapangan pertama milikmu.
+                                        Belum ada lapangan yang terdaftar atas akunmu.
+                                        Silakan hubungi Admin untuk menambahkan lapangan.
                                     </p>
                                 </td>
                             </tr>

@@ -69,10 +69,28 @@
 
                 <ul class="navbar-nav ms-auto align-items-lg-center">
 
+                    {{-- MENU ADMIN --}}
+                    @if($role === 'admin')
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                               href="{{ route('admin.dashboard') }}">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.lapangan.*') ? 'active' : '' }}"
+                               href="{{ route('admin.lapangan.index') }}">
+                                Manajemen Lapangan
+                            </a>
+                        </li>
+
+                    @endif
+
                     {{-- MENU PENYEWA --}}
                     @if($role === 'penyewa')
 
-                        {{-- DASHBOARD --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('penyewa.dashboard') ? 'active' : '' }}"
                                href="{{ route('penyewa.dashboard') }}">
@@ -80,7 +98,6 @@
                             </a>
                         </li>
 
-                        {{-- CARI LAPANGAN --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('penyewa.lapangan') || request()->routeIs('penyewa.lapangan.*') ? 'active' : '' }}"
                                href="{{ route('penyewa.lapangan') }}">
@@ -88,16 +105,13 @@
                             </a>
                         </li>
 
-                        {{-- FAVORIT --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('penyewa.favorit*') ? 'active' : '' }}"
                                href="{{ route('penyewa.favorit') }}">
                                 Favorit
-
                             </a>
                         </li>
 
-                        {{-- RIWAYAT TRANSAKSI --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('penyewa.riwayat*') ? 'active' : '' }}"
                                href="{{ route('penyewa.riwayat') }}">
@@ -105,7 +119,6 @@
                             </a>
                         </li>
 
-                        {{-- NOTIFIKASI --}}
                         <li class="nav-item">
                             <a href="{{ route('penyewa.notifikasi') }}"
                                 class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('penyewa.notifikasi*') ? 'active' : '' }}">
@@ -121,7 +134,6 @@
                             </a>
                         </li>
 
-                        {{-- PROFIL --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('penyewa.profil*') ? 'active' : '' }}"
                                href="{{ route('penyewa.profil') }}">
@@ -130,10 +142,10 @@
                         </li>
 
                     @endif
-                    {{-- MENU PEMILIK --}}  
+
+                    {{-- MENU PEMILIK --}}
                     @if($role === 'pemilik')
 
-                        {{-- DASHBOARD --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}"
                                href="{{ route('pemilik.dashboard') }}">
@@ -141,7 +153,6 @@
                             </a>
                         </li>
 
-                        {{-- MANAJEMEN KARYAWAN --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('pemilik.karyawan.*') ? 'active' : '' }}"
                                href="{{ route('pemilik.karyawan.index') }}">
@@ -149,7 +160,6 @@
                             </a>
                         </li>
 
-                        {{-- MANAJEMEN LAPANGAN --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('pemilik.lapangan.*') ? 'active' : '' }}"
                                href="{{ route('pemilik.lapangan.index') }}">
@@ -157,7 +167,20 @@
                             </a>
                         </li>
 
-                    @endif      
+                    @endif
+
+                    {{-- MENU KASIR --}}
+                    @if($role === 'kasir')
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"
+                               href="{{ route('kasir.dashboard') }}">
+                                Dashboard
+                            </a>
+                        </li>
+
+                    @endif
+
                     {{-- INFORMASI AKUN --}}
                     <li class="nav-item ms-lg-3">
                         <span class="nav-link">

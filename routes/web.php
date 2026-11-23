@@ -14,7 +14,7 @@ use App\Http\Controllers\Pemilik\ReportExportController as PemilikReportExportCo
 use App\Http\Controllers\Pemilik\KaryawanController;
 use App\Http\Controllers\Pemilik\DashboardController as PemilikDashboardController;
 use App\Http\Controllers\Pemilik\LapanganController as PemilikLapanganController;
-
+use App\Http\Controllers\Admin\LapanganController as AdminLapanganController;
 use App\Http\Controllers\Penyewa\FavoritController;
 use App\Http\Controllers\Penyewa\DashboardController as PenyewaDashboardController;
 use App\Http\Controllers\Penyewa\LapanganController as PenyewaLapanganController;
@@ -82,16 +82,36 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // Dashboard
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
+        // Export Laporan
         Route::get('/export/pdf', [ReportExportController::class, 'pdf'])
             ->name('export.pdf');
 
         Route::get('/export/excel', [ReportExportController::class, 'excel'])
             ->name('export.excel');
-    });
 
+        // Manajemen Lapangan
+        Route::get('/lapangan', [AdminLapanganController::class, 'index'])
+            ->name('lapangan.index');
+
+        Route::get('/lapangan/create', [AdminLapanganController::class, 'create'])
+            ->name('lapangan.create');
+
+        Route::post('/lapangan', [AdminLapanganController::class, 'store'])
+            ->name('lapangan.store');
+
+        Route::get('/lapangan/{id}/edit', [AdminLapanganController::class, 'edit'])
+            ->name('lapangan.edit');
+
+        Route::put('/lapangan/{id}', [AdminLapanganController::class, 'update'])
+            ->name('lapangan.update');
+
+        Route::delete('/lapangan/{id}', [AdminLapanganController::class, 'destroy'])
+            ->name('lapangan.destroy');
+    });
 /*
 |--------------------------------------------------------------------------
 | Dashboard dan Verifikasi Kasir
@@ -132,7 +152,7 @@ Route::middleware(['auth', 'role:pemilik'])
     ->prefix('pemilik')
     ->name('pemilik.')
     ->group(function () {
-        //PDF
+        //PDF dan Excel Export
         Route::get('/export/pdf', [PemilikReportExportController::class, 'pdf'])
              ->name('export.pdf');
 
@@ -146,22 +166,9 @@ Route::middleware(['auth', 'role:pemilik'])
         // Manajemen Lapangan
         Route::get('/lapangan', [PemilikLapanganController::class, 'index'])
             ->name('lapangan.index');
-
-        Route::get('/lapangan/create', [PemilikLapanganController::class, 'create'])
-            ->name('lapangan.create');
-
-        Route::post('/lapangan', [PemilikLapanganController::class, 'store'])
-            ->name('lapangan.store');
-
-        Route::get('/lapangan/{id}/edit', [PemilikLapanganController::class, 'edit'])
-            ->name('lapangan.edit');
-
-        Route::put('/lapangan/{id}', [PemilikLapanganController::class, 'update'])
-            ->name('lapangan.update');
-
-        Route::delete('/lapangan/{id}', [PemilikLapanganController::class, 'destroy'])
-            ->name('lapangan.destroy');
-
+        Route::get('/lapangan/{id}', [PemilikLapanganController::class, 'show'])
+            ->name('lapangan.show');
+            
         // Manajemen Karyawan
         Route::get('/karyawan', [KaryawanController::class, 'index'])
             ->name('karyawan.index');

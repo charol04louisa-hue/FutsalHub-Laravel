@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Pemilik;
-use Illuminate\Support\Facades\File;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pemilik\StoreLapanganRequest;
 use App\Models\Lapangan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class LapanganController extends Controller
@@ -16,6 +17,17 @@ class LapanganController extends Controller
             ->get();
 
         return view('pemilik.lapangan.index', compact('lapangan'));
+    }
+
+    /**
+     * Menampilkan detail lapangan milik Pemilik yang sedang login.
+     */
+    public function show(int $id)
+    {
+        $lapangan = Lapangan::milik(auth()->user())
+            ->findOrFail($id);
+
+        return view('pemilik.lapangan.show', compact('lapangan'));
     }
 
     public function create()
@@ -30,8 +42,15 @@ class LapanganController extends Controller
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar');
             $namaFile = Str::uuid() . '.' . $gambar->extension();
-            File::ensureDirectoryExists(public_path('assets/img/lapangan'));
-            $gambar->move(public_path('assets/img/lapangan'), $namaFile);
+
+            File::ensureDirectoryExists(
+                public_path('assets/img/lapangan')
+            );
+
+            $gambar->move(
+                public_path('assets/img/lapangan'),
+                $namaFile
+            );
 
             $validated['gambar'] = 'lapangan/' . $namaFile;
         }
@@ -66,7 +85,10 @@ class LapanganController extends Controller
             $gambar = $request->file('gambar');
             $namaFile = Str::uuid() . '.' . $gambar->extension();
 
-            $gambar->move(public_path('assets/img/lapangan'), $namaFile);
+            $gambar->move(
+                public_path('assets/img/lapangan'),
+                $namaFile
+            );
 
             $validated['gambar'] = 'lapangan/' . $namaFile;
 
