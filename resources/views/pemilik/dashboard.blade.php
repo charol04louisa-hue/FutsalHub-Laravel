@@ -174,6 +174,26 @@
         font-size: 13px;
     }
 
+    .pemilik-dashboard .report-form .form-label {
+        color: #374151;
+        font-size: 12px;
+    }
+
+    .pemilik-dashboard .report-form .form-control {
+        border-color: var(--pemilik-border);
+        border-radius: 9px;
+        min-height: 43px;
+        font-size: 13px;
+    }
+
+    .pemilik-dashboard .report-button {
+        min-height: 43px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 10px 15px;
+    }
+
     @media (max-width: 767px) {
         .pemilik-dashboard .stat-card {
             padding: 17px;
@@ -190,6 +210,10 @@
 
         .pemilik-dashboard .chart-area {
             height: 250px;
+        }
+
+        .pemilik-dashboard .report-button {
+            flex: 1;
         }
     }
 </style>
@@ -281,149 +305,222 @@
         </div>
     </div>
 
-    
-{{-- AKTIVITAS PENYEWAAN TERBARU --}}
-<div class="row g-3 mb-4">
-    <div class="col-12">
-        <div class="activity-card">
+    {{-- LAPORAN TRANSAKSI --}}
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="activity-card">
 
-            <h5 class="activity-title">Aktivitas Penyewaan Terbaru</h5>
-            <p class="activity-subtitle">
-                Lima transaksi terbaru dari seluruh lapangan milikmu
-            </p>
+                <h5 class="activity-title">Laporan Transaksi</h5>
 
-            <div class="table-responsive">
-                <table class="table activity-table">
-                    <thead>
-                        <tr>
-                            <th>Penyewa</th>
-                            <th>Lapangan</th>
-                            <th>Jadwal Penyewaan</th>
-                            <th>Total Harga</th>
-                            <th>Status Booking</th>
-                            <th>Jenis Pembayaran</th>
-                            <th>Status Pembayaran</th>
-                            <th>Diverifikasi Oleh</th>
-                        </tr>
-                    </thead>
+                <p class="activity-subtitle">
+                    Unduh laporan transaksi dan pendapatan dari seluruh lapangan milikmu.
+                </p>
 
-                    <tbody>
-                        @forelse ($aktivitasTerbaru as $aktivitas)
-                            <tr>
-                                <td>
-                                    <div class="activity-name">
-                                        {{ $aktivitas->nama_pemesan }}
-                                    </div>
-                                    <div class="activity-muted">
-                                        Transaksi #{{ $aktivitas->id }}
-                                    </div>
-                                </td>
+                <form id="formLaporanPemilik" class="row g-3 align-items-end report-form">
 
-                                <td>
-                                    <div class="activity-name">
-                                        {{ $aktivitas->lapangan?->nama_lapangan ?? 'Lapangan tidak tersedia' }}
-                                    </div>
-                                </td>
+                    <div class="col-md-4">
+                        <label for="tanggal_awal" class="form-label fw-semibold">
+                            Tanggal Awal
+                        </label>
 
-                                <td>
-                                    <div class="activity-name">
-                                        {{ $aktivitas->tanggal_sewa->format('d M Y') }}
-                                    </div>
-                                    <div class="activity-muted">
-                                        {{ \Carbon\Carbon::parse($aktivitas->jam_mulai)->format('H:i') }}
-                                        · {{ $aktivitas->durasi_jam }} jam
-                                    </div>
-                                </td>
+                        <input
+                            type="date"
+                            class="form-control"
+                            id="tanggal_awal"
+                            name="tanggal_awal"
+                            value="{{ now()->startOfMonth()->format('Y-m-d') }}"
+                            required
+                        >
+                    </div>
 
-                                <td>
-                                    <div class="activity-name">
-                                        Rp {{ number_format((float) $aktivitas->total_harga, 0, ',', '.') }}
-                                    </div>
-                                </td>
+                    <div class="col-md-4">
+                        <label for="tanggal_akhir" class="form-label fw-semibold">
+                            Tanggal Akhir
+                        </label>
 
-                                {{-- STATUS BOOKING --}}
-                                <td>
-                                    @php
-                                        $statusBooking = $aktivitas->status_booking;
-                                        $statusBookingValue = $statusBooking?->value ?? '';
-                                        $statusBookingLabel = $statusBooking?->label() ?? 'Tidak diketahui';
+                        <input
+                            type="date"
+                            class="form-control"
+                            id="tanggal_akhir"
+                            name="tanggal_akhir"
+                            value="{{ now()->format('Y-m-d') }}"
+                            required
+                        >
+                    </div>
 
-                                        $kelasBooking = match ($statusBookingValue) {
-                                            'menunggu_verifikasi' => 'status-menunggu',
-                                            'disetujui' => 'status-disetujui',
-                                            'ditolak' => 'status-ditolak',
-                                            'dibatalkan' => 'status-dibatalkan',
-                                            'kedaluwarsa' => 'status-kedaluwarsa',
-                                            default => 'status-belum-bayar',
-                                        };
-                                    @endphp
+                    <div class="col-md-4">
+                        <div class="d-flex flex-wrap gap-2">
 
-                                    <span class="status-badge {{ $kelasBooking }}">
-                                        {{ $statusBookingLabel }}
-                                    </span>
-                                </td>
+                            <button
+                                type="button"
+                                class="btn btn-danger report-button"
+                                onclick="unduhLaporanPemilik('pdf')"
+                            >
+                                Download PDF
+                            </button>
 
-                                {{-- JENIS PEMBAYARAN --}}
-                                <td>
-                                    <div class="activity-name">
-                                        {{ $aktivitas->jenis_pembayaran?->label() ?? '-' }}
-                                    </div>
-                                </td>
+                            <button
+                                type="button"
+                                class="btn btn-success report-button"
+                                onclick="unduhLaporanPemilik('excel')"
+                            >
+                                Download Excel
+                            </button>
 
-                                {{-- STATUS PEMBAYARAN --}}
-                                <td>
-                                    @php
-                                        $statusPembayaran = $aktivitas->status_pembayaran;
-                                        $statusPembayaranValue = $statusPembayaran?->value ?? '';
-                                        $statusPembayaranLabel = $statusPembayaran?->label() ?? 'Tidak diketahui';
+                        </div>
+                    </div>
 
-                                        $kelasPembayaran = match ($statusPembayaranValue) {
-                                            'lunas' => 'status-lunas',
-                                            'menunggu_verifikasi' => 'status-menunggu',
-                                            'ditolak' => 'status-ditolak',
-                                            'belum_bayar' => 'status-belum-bayar',
-                                            default => 'status-belum-bayar',
-                                        };
-                                    @endphp
+                </form>
 
-                                    <span class="status-badge {{ $kelasPembayaran }}">
-                                        {{ $statusPembayaranLabel }}
-                                    </span>
-                                </td>
-
-                                {{-- KARYAWAN YANG MEMVERIFIKASI --}}
-                                <td>
-                                    @if ($aktivitas->verifikator)
-                                        <div class="activity-name">
-                                            {{ $aktivitas->verifikator->nama_lengkap }}
-                                        </div>
-                                        <div class="activity-muted">
-                                            {{ ucfirst($aktivitas->verifikator->role->value ?? $aktivitas->verifikator->role) }}
-                                        </div>
-                                    @else
-                                        <span class="activity-muted">
-                                            Belum diverifikasi
-                                        </span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8">
-                                    <div class="empty-activity">
-                                        Belum ada aktivitas penyewaan.
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
             </div>
-
         </div>
     </div>
-</div>
 
+    {{-- AKTIVITAS PENYEWAAN TERBARU --}}
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="activity-card">
+
+                <h5 class="activity-title">Aktivitas Penyewaan Terbaru</h5>
+
+                <p class="activity-subtitle">
+                    Lima transaksi terbaru dari seluruh lapangan milikmu
+                </p>
+
+                <div class="table-responsive">
+                    <table class="table activity-table">
+                        <thead>
+                            <tr>
+                                <th>Penyewa</th>
+                                <th>Lapangan</th>
+                                <th>Jadwal Penyewaan</th>
+                                <th>Total Harga</th>
+                                <th>Status Booking</th>
+                                <th>Jenis Pembayaran</th>
+                                <th>Status Pembayaran</th>
+                                <th>Diverifikasi Oleh</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse ($aktivitasTerbaru as $aktivitas)
+                                <tr>
+                                    <td>
+                                        <div class="activity-name">
+                                            {{ $aktivitas->nama_pemesan }}
+                                        </div>
+                                        <div class="activity-muted">
+                                            Transaksi #{{ $aktivitas->id }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="activity-name">
+                                            {{ $aktivitas->lapangan?->nama_lapangan ?? 'Lapangan tidak tersedia' }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="activity-name">
+                                            {{ $aktivitas->tanggal_sewa->format('d M Y') }}
+                                        </div>
+                                        <div class="activity-muted">
+                                            {{ \Carbon\Carbon::parse($aktivitas->jam_mulai)->format('H:i') }}
+                                            · {{ $aktivitas->durasi_jam }} jam
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="activity-name">
+                                            Rp {{ number_format((float) $aktivitas->total_harga, 0, ',', '.') }}
+                                        </div>
+                                    </td>
+
+                                    {{-- STATUS BOOKING --}}
+                                    <td>
+                                        @php
+                                            $statusBooking = $aktivitas->status_booking;
+                                            $statusBookingValue = $statusBooking?->value ?? '';
+                                            $statusBookingLabel = $statusBooking?->label() ?? 'Tidak diketahui';
+
+                                            $kelasBooking = match ($statusBookingValue) {
+                                                'menunggu_verifikasi' => 'status-menunggu',
+                                                'disetujui' => 'status-disetujui',
+                                                'ditolak' => 'status-ditolak',
+                                                'dibatalkan' => 'status-dibatalkan',
+                                                'kedaluwarsa' => 'status-kedaluwarsa',
+                                                default => 'status-belum-bayar',
+                                            };
+                                        @endphp
+
+                                        <span class="status-badge {{ $kelasBooking }}">
+                                            {{ $statusBookingLabel }}
+                                        </span>
+                                    </td>
+
+                                    {{-- JENIS PEMBAYARAN --}}
+                                    <td>
+                                        <div class="activity-name">
+                                            {{ $aktivitas->jenis_pembayaran?->label() ?? '-' }}
+                                        </div>
+                                    </td>
+
+                                    {{-- STATUS PEMBAYARAN --}}
+                                    <td>
+                                        @php
+                                            $statusPembayaran = $aktivitas->status_pembayaran;
+                                            $statusPembayaranValue = $statusPembayaran?->value ?? '';
+                                            $statusPembayaranLabel = $statusPembayaran?->label() ?? 'Tidak diketahui';
+
+                                            $kelasPembayaran = match ($statusPembayaranValue) {
+                                                'lunas' => 'status-lunas',
+                                                'menunggu_verifikasi' => 'status-menunggu',
+                                                'ditolak' => 'status-ditolak',
+                                                'belum_bayar' => 'status-belum-bayar',
+                                                default => 'status-belum-bayar',
+                                            };
+                                        @endphp
+
+                                        <span class="status-badge {{ $kelasPembayaran }}">
+                                            {{ $statusPembayaranLabel }}
+                                        </span>
+                                    </td>
+
+                                    {{-- KARYAWAN YANG MEMVERIFIKASI --}}
+                                    <td>
+                                        @if ($aktivitas->verifikator)
+                                            <div class="activity-name">
+                                                {{ $aktivitas->verifikator->nama_lengkap }}
+                                            </div>
+                                            <div class="activity-muted">
+                                                {{ ucfirst($aktivitas->verifikator->role->value ?? $aktivitas->verifikator->role) }}
+                                            </div>
+                                        @else
+                                            <span class="activity-muted">
+                                                Belum diverifikasi
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+
+                            @empty
+                                <tr>
+                                    <td colspan="8">
+                                        <div class="empty-activity">
+                                            Belum ada aktivitas penyewaan.
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
 @endsection
 
 @push('scripts')
@@ -525,5 +622,33 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
+// UNDUH LAPORAN PEMILIK
+function unduhLaporanPemilik(format) {
+
+    const tanggalAwal = document.getElementById('tanggal_awal').value;
+    const tanggalAkhir = document.getElementById('tanggal_akhir').value;
+
+    if (!tanggalAwal || !tanggalAkhir) {
+        alert('Silakan lengkapi tanggal awal dan tanggal akhir.');
+        return;
+    }
+
+    if (tanggalAkhir < tanggalAwal) {
+        alert('Tanggal akhir tidak boleh lebih awal dari tanggal awal.');
+        return;
+    }
+
+    const route = format === 'pdf'
+        ? "{{ route('pemilik.export.pdf') }}"
+        : "{{ route('pemilik.export.excel') }}";
+
+    const params = new URLSearchParams({
+        tanggal_awal: tanggalAwal,
+        tanggal_akhir: tanggalAkhir
+    });
+
+    window.location.href = route + '?' + params.toString();
+}
 </script>
 @endpush

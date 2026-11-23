@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
 use App\Http\Controllers\Kasir\RiwayatPembayaranController;
-
+use App\Http\Controllers\Pemilik\ReportExportController as PemilikReportExportController;
 use App\Http\Controllers\Pemilik\KaryawanController;
 use App\Http\Controllers\Pemilik\DashboardController as PemilikDashboardController;
 use App\Http\Controllers\Pemilik\LapanganController as PemilikLapanganController;
@@ -132,6 +132,12 @@ Route::middleware(['auth', 'role:pemilik'])
     ->prefix('pemilik')
     ->name('pemilik.')
     ->group(function () {
+        //PDF
+        Route::get('/export/pdf', [PemilikReportExportController::class, 'pdf'])
+             ->name('export.pdf');
+
+        Route::get('/export/excel', [PemilikReportExportController::class, 'excel'])
+             ->name('export.excel');
 
         // Dashboard
         Route::get('/dashboard', [PemilikDashboardController::class, 'index'])
