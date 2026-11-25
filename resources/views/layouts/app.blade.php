@@ -170,16 +170,23 @@
                     @endif
 
                     {{-- MENU KASIR --}}
-                    @if($role === 'kasir')
+@if($role === 'kasir')
 
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"
-                               href="{{ route('kasir.dashboard') }}">
-                                Dashboard
-                            </a>
-                        </li>
+    <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"
+           href="{{ route('kasir.dashboard') }}">
+            Dashboard
+        </a>
+    </li>
 
-                    @endif
+    <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('kasir.profil*') ? 'active' : '' }}"
+           href="{{ route('kasir.profil') }}">
+            Profil
+        </a>
+    </li>
+
+@endif
 
                     {{-- INFORMASI AKUN --}}
                     <li class="nav-item ms-lg-3">

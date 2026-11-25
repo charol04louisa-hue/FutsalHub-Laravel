@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\VerifikasiPembayaranController;
+use App\Http\Controllers\Kasir\ProfilController as KasirProfilController;
 use App\Http\Controllers\Kasir\RiwayatPembayaranController;
 use App\Http\Controllers\Pemilik\ReportExportController as PemilikReportExportController;
 use App\Http\Controllers\Pemilik\KaryawanController;
@@ -141,6 +142,15 @@ Route::middleware(['auth', 'role:kasir'])
 
         Route::post('/tunai/{pesanan}/konfirmasi', [VerifikasiPembayaranController::class, 'konfirmasiTunai'])
             ->name('tunai.konfirmasi');
+                // Profil Kasir
+        Route::get('/profil', [KasirProfilController::class, 'index'])
+            ->name('profil');
+
+        Route::put('/profil', [KasirProfilController::class, 'update'])
+            ->name('profil.update');
+
+        Route::put('/profil/password', [KasirProfilController::class, 'updatePassword'])
+            ->name('profil.password');
     });
 
 /*
