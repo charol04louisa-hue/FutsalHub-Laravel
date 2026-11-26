@@ -578,7 +578,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     y: {
                         beginAtZero: true,
 
+                        max: Math.max(
+                            500000,
+                            Math.ceil(Math.max(0, ...data) / 100000) * 100000
+                        ),
+
                         ticks: {
+                            stepSize: 100000,
                             color: '#718096',
 
                             callback: function(value) {

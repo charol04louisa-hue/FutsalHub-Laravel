@@ -29,6 +29,7 @@ use App\Http\Controllers\Penyewa\NotifikasiController;
 use App\Http\Controllers\Penyewa\UlasanLapanganController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 /*
 |--------------------------------------------------------------------------
 | Halaman Utama
@@ -112,6 +113,15 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::delete('/lapangan/{id}', [AdminLapanganController::class, 'destroy'])
             ->name('lapangan.destroy');
+        // Profil Admin
+        Route::get('/profil', [AdminProfilController::class, 'index'])
+            ->name('profil');
+
+        Route::put('/profil', [AdminProfilController::class, 'update'])
+            ->name('profil.update');
+
+        Route::put('/profil/password', [AdminProfilController::class, 'updatePassword'])
+            ->name('profil.password');
     });
 /*
 |--------------------------------------------------------------------------
@@ -142,7 +152,7 @@ Route::middleware(['auth', 'role:kasir'])
 
         Route::post('/tunai/{pesanan}/konfirmasi', [VerifikasiPembayaranController::class, 'konfirmasiTunai'])
             ->name('tunai.konfirmasi');
-                // Profil Kasir
+        // Profil Kasir
         Route::get('/profil', [KasirProfilController::class, 'index'])
             ->name('profil');
 

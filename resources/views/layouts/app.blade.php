@@ -70,6 +70,7 @@
                 <ul class="navbar-nav ms-auto align-items-lg-center">
 
                     {{-- MENU ADMIN --}}
+                    {{-- MENU ADMIN --}}
                     @if($role === 'admin')
 
                         <li class="nav-item">
@@ -86,8 +87,14 @@
                             </a>
                         </li>
 
-                    @endif
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.profil*') ? 'active' : '' }}"
+                               href="{{ route('admin.profil') }}">
+                                Profil
+                            </a>
+                        </li>
 
+                    @endif
                     {{-- MENU PENYEWA --}}
                     @if($role === 'penyewa')
 
